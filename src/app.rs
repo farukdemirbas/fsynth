@@ -1,4 +1,7 @@
-use egui::Vec2;
+use egui::{
+    Button, CentralPanel, Color32, FontId, Frame, Layout, MenuBar, Panel, RichText, TextFormat, Ui,
+    ViewportCommand, text::LayoutJob, widgets::global_theme_preference_buttons, Margin
+};
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -44,69 +47,53 @@ impl eframe::App for TemplateApp {
     }
 
     /// Called each time the UI needs repainting, which may be many times per second.
-    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+    fn ui(&mut self, ui: &mut Ui, _frame: &mut eframe::Frame) {
         // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
         // For inspiration and more examples, go to https://emilk.github.io/egui
 
-        egui::Panel::top("top_panel").show_inside(ui, |ui| {
-            // The top panel is often a good place for a menu bar:
-
-            egui::MenuBar::new().ui(ui, |ui| {
+        Panel::top("top_panel").show_inside(ui, |ui| {
+            MenuBar::new().ui(ui, |ui| {
                 // NOTE: no File->Quit on web pages!
                 let is_web = cfg!(target_arch = "wasm32");
                 if !is_web {
                     ui.menu_button("File", |ui| {
                         if ui.button("Quit").clicked() {
-                            ui.send_viewport_cmd(egui::ViewportCommand::Close);
+                            ui.send_viewport_cmd(ViewportCommand::Close);
                         }
                     });
-                    ui.add_space(16.0);
                 }
 
-                egui::widgets::global_theme_preference_buttons(ui);
+                global_theme_preference_buttons(ui);
             });
         });
 
-        egui::CentralPanel::default().show_inside(ui, |ui| {
-            // The central panel the region left after adding TopPanel's and SidePanel's
-            ui.heading("fsynth!");
-
-            ui.separator();
-
-            // ui.horizontal(|ui| {
-            //     ui.label("Write something: ");
-            //     ui.text_edit_singleline(&mut self.label);
-            // });
-
-            ui.separator();
-
-            let btn_play = ui.add_sized([ui.available_width() / 2.0, ui.available_height() / 2.0], egui::Button::new("Play"));
-
-            if btn_play.clicked(){
-                println!("btn_play clicked.");
-            }
-
-            ui.separator();
-
-
-            ui.with_layout(egui::Layout::bottom_up(egui::Align::LEFT), |ui| {
-                powered_by_egui_and_eframe(ui);
-                egui::warn_if_debug_build(ui);
+        Panel::left("left_panel")
+            .resizable(false)
+            .show_inside(ui, |ui| {
+                Frame::default()
+                    .inner_margin(Margin::same(12))
+                    .show(ui, |_ui| {});
             });
+
+        Panel::right("right_panel")
+            .resizable(false)
+            .show_inside(ui, |ui| {
+                Frame::default()
+                    .inner_margin(Margin::same(12))
+                    .show(ui, |ui| {
+                        ui.label("right panel");
+                    });
+                });
+
+        CentralPanel::default().show_inside(ui, |ui| {
+            Frame::default()
+                .inner_margin(Margin::same(12))
+                .show(ui, |ui| {
+                    let btn_play = ui.add_sized([62.0, 62.0], Button::new("Play"));
+                    if btn_play.clicked() {
+                        println!("btn_play clicked.");
+                    }
+                });
         });
     }
-}
-
-fn powered_by_egui_and_eframe(ui: &mut egui::Ui) {
-    ui.horizontal(|ui| {
-        ui.spacing_mut().item_spacing.x = 0.0;
-        ui.label("Powered by ");
-        ui.hyperlink_to("egui", "https://github.com/emilk/egui");
-        ui.label(" and ");
-        ui.hyperlink_to(
-            "eframe",
-            "https://github.com/emilk/egui/tree/master/crates/eframe",
-        );
-        ui.label(".");
-    });
 }
