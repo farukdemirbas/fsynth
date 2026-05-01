@@ -9,10 +9,10 @@ pub struct SineOsc {
 
 impl SineOsc {
     pub fn new(sample_rate: f32) -> Self {
-        // ...
+        todo!();
     }
 
     pub fn next_sample(&mut self, frequency: f32) -> f32 {
-        // ...
+        todo!();
     }
 }

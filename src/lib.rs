@@ -3,4 +3,4 @@
 mod app;
 pub mod audio;
 
-pub use app::TemplateApp;
+pub use app::FSynthApp;

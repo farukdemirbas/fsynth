@@ -22,7 +22,7 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "fsynth!",
         native_options,
-        Box::new(|cc| Ok(Box::new(fsynth::TemplateApp::new(cc)))),
+        Box::new(|cc| Ok(Box::new(fsynth::FSynthApp::new(cc)))),
     )
 }
 
@@ -52,7 +52,7 @@ fn main() {
             .start(
                 canvas,
                 web_options,
-                Box::new(|cc| Ok(Box::new(fsynth::TemplateApp::new(cc)))),
+                Box::new(|cc| Ok(Box::new(fsynth::FSynthApp::new(cc)))),
             )
             .await;
 
