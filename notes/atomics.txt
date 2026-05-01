@@ -1,0 +1,29 @@
+Atomics are CPU-supported synchronized variables for concurrency safety. A normal uin32 is not thread-safe. But an Atomic U32 is (without using mutex).
+Mutexes aren't desirable because they can block, sleep, etc. Mutexes are overkill for simple shared variables.
+
+An explanation of Atomics:
+Atomics are a very old concept.
+Normally when you do x += 1, this it not a single operation.
+This is: read x into register -> increment register -> load new value to x.
+If two threads try to do this at the same time, they will step on each others toes because they will be accessing X in an intermediate state. Atomics ensure that the CPU does not allow any core to access the variable while it's in an intermediate states.
+
+Mutexes on the other hand will actually block an entire thread when it 
+tries to access a locked variable, and this is performed by the OS.
+
+With atomics there is no OS involvement. Atomics are CPU level.
+
+Atomics aren't good for everything though. They are good for counters, 
+flags, small shared values, lock-free structures.
+
+Mutex:
+    "wait until I can enter a protected region"
+
+Atomic:
+    "hardware guarantees this single operation is indivisible"
+
+The underlying mechanisms of Amotics and Mutex are conceptually similar, but in practice they are vastly different. Atomics are much simpler and faster and lower level. With mutexes you have the OS scheduler involved, you have kernel transitions, you have sleeping threads, and a bunch of other crap. Whereas atomics take up a few nanoseconds or just a few CPU cycles.
+
+Another core trying to access it may briefly stall at the hardware level for a tiny amount of time, but it is not “sleeping” like mutex waiting.
+
+Atomics protect 1 memory operation.
+Mutexes protect arbitrary code regions (this is huge when you think about it).

@@ -1,0 +1,18 @@
+main.rs
+  uses app
+  uses audio
+
+app.rs
+  uses audio::params
+
+audio::engine
+  uses audio::params
+  uses audio::dsp
+  uses cpal
+
+audio::dsp
+  uses nothing UI-related
+
+audio::params
+  uses atomics / sync primitives
+  
