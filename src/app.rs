@@ -25,7 +25,7 @@ impl Default for FSynthApp {
             // Example stuff:
             label: "Hello World!".to_owned(),
             value: 2.7,
-            audio: AudioEngine::new(),
+            audio: AudioEngine::init(),
         }
     }
 }
