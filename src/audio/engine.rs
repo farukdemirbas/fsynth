@@ -47,20 +47,10 @@ impl AudioEngine {
 
         println!("Building output stream...");
 
-        if config.channels != 2 {
-            panic!("fsynth only supports stereo output. Current config has {} channels.", config.channels);
-        }
-
         let stream = device
             .build_output_stream(
                 &config,
-                move |data: &mut [f32], info: &cpal::OutputCallbackInfo| {
-                    println!("Buffer length: {}", data.len());
-                    for frame in data.chunks_mut(2) {
-                        let (mut left, mut right) = (frame[0], frame[1]);
-                        
-                    }
-                },
+                fill_output_buffer,
                 move |err| eprintln!("Error: {:?}", err),
                 None,
             )
@@ -71,5 +61,12 @@ impl AudioEngine {
         println!("Audio engine initialized.");
 
         AudioEngine { stream, config }
+    }
+}
+
+fn fill_output_buffer(data: &mut [f32], _: &cpal::OutputCallbackInfo) {
+    for frame in data.chunks_mut(2) {
+        // frame[0] -> left
+        // frame[1] -> right
     }
 }
