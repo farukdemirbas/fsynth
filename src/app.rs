@@ -1,6 +1,5 @@
 use egui::{
-    Button, CentralPanel, Frame, MenuBar, Panel, Ui,
-    ViewportCommand, widgets::global_theme_preference_buttons, Margin
+    Button, CentralPanel, Color32, CornerRadius, Frame, Margin, MenuBar, Panel, Slider, Stroke, Ui, ViewportCommand, widgets::global_theme_preference_buttons
 };
 
 use crate::audio::engine::AudioEngine;
@@ -92,13 +91,29 @@ impl eframe::App for FSynthApp {
                 });
 
         CentralPanel::default().show_inside(ui, |ui| {
+
+            // These will become shared params. This is dummy vals.
+            let mut name = "Instrument 1".to_string();
+            let mut pan = 0.0;
+            let mut volume = 0.1;
+            let mut frequency = 440.0;
+            
             Frame::default()
                 .inner_margin(Margin::same(12))
+                .outer_margin(Margin::same(12))
+                .stroke(Stroke::new(0.4, Color32::WHITE))
+                .corner_radius(CornerRadius::same(2))
                 .show(ui, |ui| {
-                    let btn_play = ui.add_sized([62.0, 62.0], Button::new("Play"));
-                    if btn_play.clicked() {
-                        println!("btn_play clicked.");
-                    }
+                    // ui.vertical(|ui| {
+                        ui.label(&name);
+                        ui.separator();
+                        ui.end_row();
+                        ui.add(egui::Slider::new(&mut pan, -1.0..=1.0));
+                        ui.end_row();
+                        ui.add(egui::Slider::new(&mut volume, -0.0..=1.0));
+                        ui.end_row();
+                        ui.add(egui::Slider::new(&mut frequency, 80.0..=4000.0).suffix("Hz"));
+                    // })
                 });
         });
     }
