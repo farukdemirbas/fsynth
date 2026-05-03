@@ -1,0 +1,27 @@
+UI thread owns:
+- FSynthApp
+- AudioEngine handle
+- egui state
+
+Callback thread (the thread spawned by CPAL that calls the audio callback) owns:
+- Daw
+- Instruments
+- Oscillators
+- Phase/Freq/Volume/Pan etc
+
+
+----
+
+
+UI thread
+  runs eframe / egui
+  calls FSynthApp::new()
+  calls FSynthApp::ui()
+  creates AudioEngine
+  builds CPAL stream
+
+CPAL audio thread
+  calls your output callback
+  callback calls Daw::apply_master_output()
+  Daw calls Instrument::apply_self()
+  Instrument calls Oscillator::next_value()

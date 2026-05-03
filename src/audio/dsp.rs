@@ -15,12 +15,15 @@ impl Oscillator {
     pub fn new(sample_rate: usize) -> Self {
         Self {
             phase: 0.0,
-            sample_rate: sample_rate as f32
+            sample_rate: sample_rate as f32,
         }
     }
-    
+
     pub fn next_value(&mut self, amplitude: f32, frequency: f32) -> f32 {
         self.phase += 2.0 * PI * frequency / self.sample_rate;
+        if self.phase > 2.0 * PI {
+            self.phase -= 2.0 * PI;
+        }
         amplitude * self.phase.sin()
     }
 

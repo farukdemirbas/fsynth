@@ -13,7 +13,7 @@ pub struct FSynthApp {
     label: String,
 
     #[serde(skip)]
-    audio: AudioEngine,
+    audio_engine: AudioEngine,
 
     #[serde(skip)] // This how you opt-out of serialization of a field
     value: f32,
@@ -25,7 +25,7 @@ impl Default for FSynthApp {
             // Example stuff:
             label: "Hello World!".to_owned(),
             value: 2.7,
-            audio: AudioEngine::init(),
+            audio_engine: AudioEngine::new(),
         }
     }
 }
