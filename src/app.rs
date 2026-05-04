@@ -51,14 +51,10 @@ impl eframe::App for FSynthApp {
         eframe::set_value(storage, eframe::APP_KEY, self);
     }
 
-    /// Called each time the UI needs repainting, which may be many times per second.
+    /// Called each time the UI needs repainting
     fn ui(&mut self, ui: &mut Ui, _frame: &mut eframe::Frame) {
-        // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
-        // For inspiration and more examples, go to https://emilk.github.io/egui
-
         Panel::top("top_panel").show_inside(ui, |ui| {
             MenuBar::new().ui(ui, |ui| {
-                // NOTE: no File->Quit on web pages!
                 let is_web = cfg!(target_arch = "wasm32");
                 if !is_web {
                     ui.menu_button("File", |ui| {
@@ -104,16 +100,25 @@ impl eframe::App for FSynthApp {
                 .stroke(Stroke::new(0.4, Color32::WHITE))
                 .corner_radius(CornerRadius::same(2))
                 .show(ui, |ui| {
-                    // ui.vertical(|ui| {
+                    ui.vertical(|ui| {
                         ui.label(&name);
                         ui.separator();
-                        ui.end_row();
-                        ui.add(egui::Slider::new(&mut pan, -1.0..=1.0));
-                        ui.end_row();
-                        ui.add(egui::Slider::new(&mut volume, -0.0..=1.0));
-                        ui.end_row();
-                        ui.add(egui::Slider::new(&mut frequency, 80.0..=4000.0).suffix("Hz"));
-                    // })
+
+                        ui.horizontal(|ui| {
+                            ui.label("Panning");
+                            ui.add(egui::Slider::new(&mut pan, -1.0..=1.0));
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("Volume");
+                            ui.add(egui::Slider::new(&mut volume, -0.0..=1.0));
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("Frequency");
+                            ui.add(egui::Slider::new(&mut frequency, 80.0..=4000.0).suffix("Hz"));
+                        });
+                    })
                 });
         });
     }

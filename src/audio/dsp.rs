@@ -2,13 +2,14 @@
 // pure audio logic here.
 // this file should remain completely testable independently
 
-use std::f32::consts::PI;
+use std::{f32::consts::PI, sync::Arc};
+
+use crate::audio::params::AudioParams;
 
 pub struct Oscillator {
     sample_rate: f32,
     phase: f32,
-    // freq: f32,
-    // amplitude: f32,
+    audio_params: Arc<AudioParams>
 }
 
 impl Oscillator {
@@ -16,19 +17,19 @@ impl Oscillator {
         Self {
             phase: 0.0,
             sample_rate: sample_rate as f32,
+            audio_params: Arc::new(AudioParams::default())
         }
     }
 
-    pub fn next_value(&mut self, amplitude: f32, frequency: f32) -> f32 {
+    pub fn next_value(&mut self) -> f32 {
+        let amplitude = self.audio_params.amplitude.get();
+        let frequency = self.audio_params.frequency.get();
+
         self.phase += 2.0 * PI * frequency / self.sample_rate;
         if self.phase > 2.0 * PI {
             self.phase -= 2.0 * PI;
         }
         amplitude * self.phase.sin()
-    }
-
-    pub fn set_sample_rate(&mut self, sample_rate: usize) {
-        self.sample_rate = sample_rate as f32;
     }
 
     pub fn reset_phase(&mut self) {

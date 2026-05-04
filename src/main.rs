@@ -8,15 +8,10 @@ fn main() -> eframe::Result {
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_inner_size([400.0, 300.0])
-            .with_resizable(false),
-            // .with_icon(
-            //     // NOTE: Adding an icon is optional
-            //     eframe::icon_data::from_png_bytes(
-            //         &include_bytes!("../assets/favicon-512x512.png")[..],
-            //     )
-            //     .expect("Failed to load icon"),
-            // ),
+            .with_app_id("fsynth")
+            .with_inner_size([800.0, 800.0])
+            .with_resizable(true),
+        // persist_window: false,
         ..Default::default()
     };
     eframe::run_native(

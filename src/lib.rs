@@ -2,5 +2,6 @@
 
 mod app;
 pub mod audio;
+pub mod utils;
 
 pub use app::FSynthApp;

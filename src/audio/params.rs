@@ -1,10 +1,24 @@
-// shared ui -> audio parameters
-// this the UI will change the parameters defined here, and the audio engine will read them.
+use std::sync::atomic::AtomicBool;
 
-// Eventually use atomics for thread-safe parameters because the UI thread and the Audio thread will both be accessing them.
+use crate::utils::sync::AtomicF32;
+
+// audio parameters shared between the audio thread and the ui thread.
+// Each Arc<AudioParam> will be cloned, one for UI and one for the Oscillator.
 
 pub struct AudioParams {
-    // frequency
-    // gain
-    // enabled=true etc.
+    pub enabled: AtomicBool,
+    pub amplitude: AtomicF32,
+    pub frequency: AtomicF32,
+    pub pan: AtomicF32,
+}
+
+impl Default for AudioParams {
+    fn default() -> Self {
+        Self {
+            enabled: AtomicBool::new(true),
+            amplitude: AtomicF32::new(0.1),
+            frequency: AtomicF32::new(440.0),
+            pan: AtomicF32::new(0.0),
+        }
+    }
 }
